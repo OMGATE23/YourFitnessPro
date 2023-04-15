@@ -10,7 +10,18 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : [true , "Name is a required field!"]
     },
-
+    weight : {
+        type : Number,
+        required : [true , "Enter weight for calculations"]
+    },
+    height : {
+        type : Number,
+        required : [true , "Enter height for calculations"]
+    },
+    age : {
+        type : Number,
+        required : [true , "Enter age for calculations"]
+    },
     password : {
         type : String,
         required : [true , "Password is neccessary to register"],

@@ -5,9 +5,12 @@ const connectToDB = require('./config/db')
 const userRoute = require('./routes/user')
 const splitRoute = require('./routes/split')
 const exerciseRoute = require('./routes/exercise')
+const cors = require('cors')
+app.use(cors())
 
 connectToDB()
 app.use(express.json())
+
 
 app.use('/user' , userRoute)
 app.use('/split' , splitRoute)

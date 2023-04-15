@@ -21,12 +21,13 @@ const cookieToken = async (res, user) => {
 
     user.password = undefined;
     res.status(200).cookie("token", token, options).json({
-      succes: true,
+      success: true,
       token,
       user,
     });
   } catch (err) {
     return res.json({
+      success : "false",
       message: "Something went wrong in cookieToken.js"
     });
   }

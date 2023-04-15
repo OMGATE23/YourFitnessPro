@@ -5,17 +5,21 @@ const Split = require("../models/split");
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name , weight , height , age } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
       email,
       password: encryptedPassword,
+      weight,
+      height , 
+      age
     });
 
     cookieToken(res, user);
   } catch (err) {
     return res.json({
+      success : false,
       error: err.message,
     });
   }
@@ -26,17 +30,20 @@ exports.login = async (req, res) => {
 
     if (!(email || password)) {
       return res.status(400).json({
+        success : false,
         message: "Email or password not given",
       });
     }
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
+        success : false,
         message: "Email or Password is incorrect",
       });
     }
     if (!(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({
+        success : false,
         message: "Email or Password is incorrect",
       });
     }
@@ -44,6 +51,7 @@ exports.login = async (req, res) => {
     cookieToken(res, user);
   } catch (err) {
     return res.status(500).json({
+      success : false,
       message: `Something went wrong: ${err.message}`,
     });
   }
@@ -77,11 +85,7 @@ exports.getAllSplits = async (req, res) => {
       let splitId = list[i].toString();
       let split = await Split.findById(splitId);
 
-      let splitDetail = {
-        name: split.name,
-        exercises: split.exercises,
-      };
-      splitDetails = [splitDetail , ...splitDetails]
+      splitDetails = [split , ...splitDetails]
     }
 
     return res.status(200).json({
