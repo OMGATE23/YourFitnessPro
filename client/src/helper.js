@@ -83,6 +83,7 @@ export const logIn = async (user, setUser) => {
     setUser(data.user);
     return {
       success: true,
+      user: data.user,
       message: "User created",
     };
   } catch (err) {
@@ -90,6 +91,26 @@ export const logIn = async (user, setUser) => {
       success: false,
       error: err.message,
     };
+  }
+};
+
+export const logoutAction = async (etUser) => {
+  try {
+    const res = await fetch("http://localhost:4000/user/logout", {
+      method: "GET",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    const data = await res.json();
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
@@ -127,19 +148,157 @@ export const getExerciseDescription = async (name) => {
   }
 };
 
-export const getYouTubeVideo = async(name) => {
-  name = name + ' exercise'
-  let query = name.replaceAll( ' ' , '%2B')
+export const getYouTubeVideo = async (name) => {
+  name = name + " exercise";
+  let query = name.replaceAll(" ", "%2B");
   const options = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'X-RapidAPI-Key': '96ff7fd609msh42f0999ddc4f585p157691jsn1f6a8eaf3666',
-      'X-RapidAPI-Host': 'simple-youtube-search.p.rapidapi.com'
-    }
+      "X-RapidAPI-Key": "96ff7fd609msh42f0999ddc4f585p157691jsn1f6a8eaf3666",
+      "X-RapidAPI-Host": "simple-youtube-search.p.rapidapi.com",
+    },
   };
-  
-  const res = await fetch(`https://simple-youtube-search.p.rapidapi.com/search?query=${query}&safesearch=false`, options)
-  const data = await res.json()
-  console.log(data)
-  return {data}
-}
+
+  const res = await fetch(
+    `https://simple-youtube-search.p.rapidapi.com/search?query=${query}&safesearch=false`,
+    options
+  );
+  const data = await res.json();
+  return { data };
+};
+
+export const countCalorieReq = async ({
+  age,
+  gender,
+  height,
+  weight,
+  activityLevel,
+}) => {
+  try {
+    console.log({ age, gender, height, weight, activityLevel });
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "96ff7fd609msh42f0999ddc4f585p157691jsn1f6a8eaf3666",
+        "X-RapidAPI-Host": "fitness-calculator.p.rapidapi.com",
+      },
+    };
+
+    const req = await fetch(
+      `https://fitness-calculator.p.rapidapi.com/dailycalorie?age=${age}&gender=${gender}&height=${height}&weight=${weight}&activitylevel=${activityLevel}`,
+      options
+    );
+
+    const data = await req.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getAllSplitsAction = async () => {
+  try {
+    console.log(JSON.parse(localStorage.getItem("token")));
+    const res = await fetch("http://localhost:4000/user/getsplits", {
+      method: "GET",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("token")),
+      },
+    });
+
+    const data = await res.json();
+
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const enrollExerciseAction = async ({name , split_id , exercise_id}) => {
+  try {
+    
+    const res = await fetch("http://localhost:4000/exercise/enroll", {
+      method: "POST",
+      body: JSON.stringify({ name , split_id , exercise_id }),
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("token"))
+      },
+    });
+    console.log(res.status !== 200);
+    if (res.status !== 200) {
+
+      return {
+        success: false,
+        res: await res.json(),
+      };
+    }
+
+    const data = await res.json();
+
+    return data
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getSplitsAndExercisesAction = async (split_id) => {
+  try {
+    
+    const res = await fetch(`http://localhost:4000/split/getsplit/${split_id}`, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+    if (res.status !== 200) {
+
+      return {
+        success: false,
+        res: await res.json(),
+      };
+    }
+
+    const data = await res.json();
+
+    return data
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const CalculateBMI = async ({
+  age,
+  height,
+  weight,
+}) => {
+  try {
+    console.log({ age, height, weight });
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '96ff7fd609msh42f0999ddc4f585p157691jsn1f6a8eaf3666',
+        'X-RapidAPI-Host': 'fitness-calculator.p.rapidapi.com'
+      }
+    };
+    
+    const req = await fetch(`https://fitness-calculator.p.rapidapi.com/bmi?age=${age}&weight=${weight}&height=${height}`, options)
+
+    const data = await req.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};

@@ -9,6 +9,7 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/outline";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import {logoutAction} from '../../helper'
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Sidebar = () => {
 
   async function logout() {
     try {
+      await logoutAction()
       localStorage.clear();
       setUser(null)
       navigate("/");
@@ -47,7 +49,7 @@ const Sidebar = () => {
           <div className="flex justify-center lg:justify-start gap-4  w-2/3 mx-auto my-4 lg:my-0">
             <ClipboardDocumentCheckIcon className="w-[26px] lg:w-[20px]" width={20} />
             <span className="hidden lg:block  py-3 text-center text-xl ">
-              Playlists
+              Splits
             </span>
           </div>
         </Link>
@@ -59,14 +61,7 @@ const Sidebar = () => {
             </span>
           </div>
         </Link>
-        <Link to="/videosearch" className="block">
-          <div className="flex justify-center lg:justify-start gap-4  w-2/3 mx-auto my-4 lg:my-0">
-            <VideoCameraIcon className="w-[26px] lg:w-[20px]" width={20} />
-            <span className="hidden lg:block  py-3 text-center text-xl ">
-              Leaderboard
-            </span>
-          </div>
-        </Link>
+        
         <button className="block" onClick={logout}>
           <div className="flex justify-center lg:justify-start gap-4  w-2/3 mx-auto my-4 lg:my-0">
             <ArrowRightOnRectangleIcon

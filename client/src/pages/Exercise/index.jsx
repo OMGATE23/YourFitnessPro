@@ -4,14 +4,46 @@ import {
   getExerciseDescription,
   getOneExercisebyID,
   getYouTubeVideo,
+  getAllSplitsAction,
+  enrollExerciseAction,
 } from "../../helper";
 import Paragraph from "../../components/Paragraph";
 import Sidebar from "../../components/Sidebar";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { toast } from "react-toastify";
 
 const Exercise = () => {
   const { id } = useParams();
   const [exercise, setExercise] = useState();
   const [url, setUrl] = useState();
+  const [splits, setSplits] = useState();
+  const [selectedSplit, setSelectedSplit] = useState("");
+  const { user } = useAuthContext();
+
+  const handleSelectChange = (event) => {
+    setSelectedSplit(event.target.value);
+  };
+
+  const handleSubmit = async(event) => {
+    event.preventDefault();
+    console.log(selectedSplit);
+    console.log({name : exercise.name , split_id : selectedSplit , exercise_id : id})
+    const data= await enrollExerciseAction({name : exercise.name , split_id : selectedSplit , exercise_id : id})
+    console.log(data)
+    if(data.success){
+      toast.success("Exercise enrolled successfully")
+    }
+  };
+
+  const splitsLoader = async () => {
+    const response = await getAllSplitsAction();
+    console.log(JSON.stringify(response.splitDetails));
+    setSplits(response.splitDetails);
+  };
+
+  useEffect(() => {
+    splitsLoader();
+  }, []);
 
   async function getVideo(name) {
     const { data } = await getYouTubeVideo(name);
@@ -32,47 +64,26 @@ const Exercise = () => {
     <div className="flex">
       <Sidebar />
       {exercise && (
-        <div className="w-full m-12  flex items-center justify-between gap-12">
-          {/* <div className="w-[60%] h-4/5 ml-12 flex flex-col justify-evenly gap-12 items-center">
-            {url && (
-              <iframe
-                className="w-4/5 aspect-video"
-                src={`https://www.youtube.com/embed/${url}`}
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-            )}
-          </div>
-          <div className="mr-12 outline outline-2 h-full flex flex-col items-center justify-center gap-8">
-            <div>
-              <h1> Name : {exercise.name}</h1>
-              <p>Target Muscle : {exercise.target} </p>
-              <p>Body Part Exercised : {exercise.bodyPart}</p>
-              <p>Equipment : {exercise.equipment}</p>
-            </div>
-            <img src={exercise.gifUrl} />
-          </div> */}
-          <div className="bg-white w-[90%] py-12  mx-auto rounded-md shadow-xl overflow-hidden flex items-center justify-evenly">
+        <div className="w-full  xl:m-12  flex  items-center justify-between gap-12 ">
+          
+          <div className="flex flex-col items-center justify-evenly bg-white w-[90%] py-12  mx-auto rounded-md shadow-xl overflow-hidden xl:flex-row">
             {/* YouTube embed video */}
-            <div className=" bg-gray-100 rounded-2xl w-[60%] p-16">
+            <div className=" bg-gray-100 rounded-2xl w-[400px] p-6  xl:p-16 xl:w-[55%]">
               <iframe
                 title={exercise.name}
                 src={`https://www.youtube.com/embed/${url}`}
                 allowFullScreen
                 className="w-full aspect-video"
               />
-              <h1 className="text-3xl font-bold text-gray-800 p-4 capitalize">
-              {exercise.name}
-            </h1>
+              <h1 className="text-3xl font-bold text-gray-800 p-4 capitalize text-center xl:text-left">
+                {exercise.name}
+              </h1>
             </div>
 
             {/* Title */}
-            
 
             {/* List of points */}
-            <div className="border-2 border-gray-300 ">
+            <div className="border-2 border-gray-300 mt-12 ">
               <ul className="text-lg w-[70%] mx-auto text-gray-600 p-4">
                 <li>
                   <span className="font-bold">Equipment:</span>{" "}
@@ -87,7 +98,27 @@ const Exercise = () => {
                   {exercise.target}
                 </li>
               </ul>
-
+              {splits && (
+                <div className="flex items-center justify-center gap-3">
+                  <label htmlFor="split-select"></label>
+                  <select
+                    id="split-select"
+                    value={selectedSplit}
+                    onChange={handleSelectChange}
+                    className="py-2 px-1 rounded-lg"
+                  >
+                    <option value="">-- Select a split --</option>
+                    {splits.map((split) => (
+                      <option key={split._id} value={split._id}>
+                        {split.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button className="py-1 px-2 outline outline-1 rounded-lg" onClick={handleSubmit} type="submit">
+                    Submit
+                  </button>
+                </div>
+              )}
               {/* Exercise gif */}
               <div className="">
                 <img

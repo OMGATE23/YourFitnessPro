@@ -21,11 +21,7 @@ exports.enrollForExercise = async (req, res) => {
       });
     }
 
-    if (!user.created_splits.includes(split_id)) {
-      return res.status(400).json({
-        message: "split mentioned does not belong to user logged in",
-      });
-    }
+    
     const exercise = await Exercise.create({
       name,
       no_of_sets,
@@ -37,7 +33,7 @@ exports.enrollForExercise = async (req, res) => {
 
     split.exercises = [...split.exercises , exercise._id];
 
-    split.save()
+    await split.save()
 
     return res.status(200).json({
       success: true,

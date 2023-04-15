@@ -1,3 +1,4 @@
+const Exercise = require("../models/exercise");
 const Split = require("../models/split");
 const User = require("../models/user");
 
@@ -54,6 +55,45 @@ exports.getSplit = async (req, res) => {
     return res.status(200).json({
       success: true,
       split,
+    });
+  } catch (err) {
+    return res.json({
+      message: err.message,
+    });
+  }
+};
+
+exports.getSplitAndExercises = async (req, res) => {
+  try {
+    const { split_id } = req.params;
+
+    if (!split_id) {
+      return res.status(400).json({
+        message: "split id not defined",
+      });
+    }
+
+    const split = await Split.findById(split_id);
+
+    
+
+    if (!split) {
+      return res.status(400).json({
+        message: "Invalid ID : split not found",
+      });
+    }
+
+    let exerciseDetails = [];
+
+    for(let i = 0 ; i < split.exercises.length ; i++){
+      let exercise = await Exercise.findById(split.exercises[i])
+      exerciseDetails.push(exercise)
+    }
+
+    return res.status(200).json({
+      success: true,
+      split,
+      exerciseDetails
     });
   } catch (err) {
     return res.json({
