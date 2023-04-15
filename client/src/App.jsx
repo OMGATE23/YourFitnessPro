@@ -10,6 +10,7 @@ import Calculators from "./pages/Calculators";
 import EnrolledSplits from "./pages/EnrolledSplits";
 import Search from "./pages/Search";
 import VideoSearch from "./pages/VideoSearch";
+import Exercise from "./pages/Exercise";
 
 function App() {
   const router = createBrowserRouter([
@@ -48,6 +49,10 @@ function App() {
         {
           path : "videosearch",
           element : <VideoSearch/>
+        },
+        {
+          path : "exercise/:id",
+          element : <Exercise/>
         }
       ],
     },
