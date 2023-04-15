@@ -11,6 +11,9 @@ import EnrolledSplits from "./pages/EnrolledSplits";
 import Search from "./pages/Search";
 import VideoSearch from "./pages/VideoSearch";
 import Exercise from "./pages/Exercise";
+import Split from "./pages/Split";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +56,10 @@ function App() {
         {
           path : "exercise/:id",
           element : <Exercise/>
+        },
+        {
+          path : "split/:id",
+          element : <Split/>
         }
       ],
     },
@@ -62,6 +69,7 @@ function App() {
       <AuthContextProvider>
         <RouterProvider router={router} />
       </AuthContextProvider>
+      <ToastContainer />
     </div>
   );
 }

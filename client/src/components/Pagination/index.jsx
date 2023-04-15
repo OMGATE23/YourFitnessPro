@@ -24,7 +24,7 @@ function Pagination({items}) {
 
   return (
     <div className="my-8" >
-      <div className="flex py-8 flex-wrap justify-center  gap-8">
+      <div className="flex py-8 flex-wrap justify-center gap-8">
         {currentItems.map((item) => (
           <Card key={item.name} name={item.name} id = {item.id} gifUrl={item.gifUrl} />
         ))}

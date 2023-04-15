@@ -7,7 +7,7 @@ const exerciseSchema = new mongoose.Schema({
     },
 
     exercise_id : {
-        type : Number,
+        type : String,
         required : [true , "Exercise ID is neccessary"]
     },  
 
