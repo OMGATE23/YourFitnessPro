@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import Sidebar from "../../components/Sidebar";
+import {useNavigate} from 'react-router-dom'
 
 const Dashboard = () => {
   const { user } = useAuthContext();
+  const navigate = useNavigate()  
+
 
   console.log(user);
+
+  useEffect(() => {
+    if(!user){
+      navigate('/login')
+    }
+  } , [user])
   return (
     <div className="flex">
       <Sidebar />
