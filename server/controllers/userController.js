@@ -99,3 +99,40 @@ exports.getAllSplits = async (req, res) => {
     });
   }
 };
+
+exports.updateHeightWeightAge = async(req , res) => {
+  try {
+    const {weight , height , age} = req.body
+    const user = req.user
+    const updatedUser = await User.findById(user._id);
+
+    if(weight){
+      updatedUser.weight = weight
+    }
+
+    if(height){
+      updatedUser.height = height
+    }
+
+    if(age){
+      updatedUser.age = age
+    }
+
+    await updatedUser.save()
+
+
+    return res.status(200).json({
+      success : true,
+      height,
+      weight,
+      age
+    })
+
+
+  } catch (err) {
+    return res.json({
+      success : false,
+      error : err.message
+    })
+  }
+}

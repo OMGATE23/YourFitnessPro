@@ -302,3 +302,65 @@ export const CalculateBMI = async ({
     console.log(err.message);
   }
 };
+
+export const createSplitAction = async(name) => {
+  try {
+    
+    const res = await fetch("http://localhost:4000/split/create", {
+      method: "POST",
+      body: JSON.stringify({ name }),
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("token"))
+      },
+    });
+    console.log(res.status !== 200);
+    if (res.status !== 200) {
+
+      return {
+        success: false,
+        res: await res.json(),
+      };
+    }
+
+    const data = await res.json();
+
+    return data
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+export const updateUserAttributes = async(weight , height , age) => {
+  try {
+    
+    const res = await fetch("http://localhost:4000/user/updateattr", {
+      method: "POST",
+      body: JSON.stringify({ weight , height , age }),
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("token"))
+      },
+    });
+    console.log(res.status !== 200);
+    if (res.status !== 200) {
+
+      return {
+        success: false,
+        res: await res.json(),
+      };
+    }
+
+    const data = await res.json();
+
+    return data
+  } catch (err) {
+    console.log(err.message);
+  }
+}
