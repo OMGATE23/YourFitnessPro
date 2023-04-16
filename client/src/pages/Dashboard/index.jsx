@@ -8,6 +8,9 @@ const Dashboard = () => {
   const { user } = useAuthContext();
   const [results, setResults] = useState();
   const navigate = useNavigate();
+  const [age, setAge] = useState();
+  const [height, setHeight] = useState();
+  const [weight, setWeight] = useState();
 
   const calculateBMI = async () => {
     const data = await CalculateBMI({
