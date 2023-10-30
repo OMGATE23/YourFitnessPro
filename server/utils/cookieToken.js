@@ -19,16 +19,20 @@ const cookieToken = async (res, user) => {
       httpOnly: true,
     };
 
-    user.password = undefined;
-    res.status(200).cookie("token", token, options).json({
+    user.password = null;
+
+    return res.status(200).cookie("token", token, options).json({
       success: true,
       token,
-      user,
+      user : { ...user , password :undefined},
     });
   } catch (err) {
+    user.password = undefined
     return res.json({
       success : "false",
-      message: "Something went wrong in cookieToken.js"
+      message: "Something went wrong in cookieToken.js",
+      err,
+      user 
     });
   }
 };

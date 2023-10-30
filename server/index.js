@@ -11,7 +11,6 @@ app.use(cors())
 connectToDB()
 app.use(express.json())
 
-
 app.use('/user' , userRoute)
 app.use('/split' , splitRoute)
 app.use('/exercise' , exerciseRoute)

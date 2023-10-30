@@ -136,3 +136,14 @@ exports.updateHeightWeightAge = async(req , res) => {
     })
   }
 }
+
+exports.health = async(req , res) => {
+  try {
+    return res.status(200).json({"message" : "mic testing"})
+  }catch(error){
+    return res.json({
+      success : false,
+      error : error.message
+    })
+  }
+}
