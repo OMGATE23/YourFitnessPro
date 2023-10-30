@@ -4,7 +4,7 @@ export const signUp = async (user, setUser) => {
   try {
     const { email, password, name, weight, height, age } = user;
 
-    const res = await fetch("http://localhost:4000/user/register", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/user/register", {
       method: "POST",
       body: JSON.stringify({ email, password, name, weight, height, age }),
       mode: "cors",
@@ -50,7 +50,7 @@ export const signUp = async (user, setUser) => {
 export const logIn = async (user, setUser) => {
   try {
     const { email, password } = user;
-    const res = await fetch("http://localhost:4000/user/login", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/user/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       mode: "cors",
@@ -96,7 +96,7 @@ export const logIn = async (user, setUser) => {
 
 export const logoutAction = async (etUser) => {
   try {
-    const res = await fetch("http://localhost:4000/user/logout", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/user/logout", {
       method: "GET",
       mode: "cors",
       cache: "no-cache",
@@ -200,7 +200,7 @@ export const countCalorieReq = async ({
 export const getAllSplitsAction = async () => {
   try {
     console.log(JSON.parse(localStorage.getItem("token")));
-    const res = await fetch("http://localhost:4000/user/getsplits", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/user/getsplits", {
       method: "GET",
       mode: "cors",
       cache: "no-cache",
@@ -212,7 +212,7 @@ export const getAllSplitsAction = async () => {
     });
 
     const data = await res.json();
-
+    console.log(data)
     return data;
   } catch (err) {
     console.log(err.message);
@@ -222,7 +222,7 @@ export const getAllSplitsAction = async () => {
 export const enrollExerciseAction = async ({name , split_id , exercise_id}) => {
   try {
     
-    const res = await fetch("http://localhost:4000/exercise/enroll", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/exercise/enroll", {
       method: "POST",
       body: JSON.stringify({ name , split_id , exercise_id }),
       mode: "cors",
@@ -253,7 +253,7 @@ export const enrollExerciseAction = async ({name , split_id , exercise_id}) => {
 export const getSplitsAndExercisesAction = async (split_id) => {
   try {
     
-    const res = await fetch(`http://localhost:4000/split/getsplit/${split_id}`, {
+    const res = await fetch(`https://yourfitnesspro.onrender.com/split/getsplit/${split_id}`, {
       method: "GET",
       mode: "cors",
       cache: "no-cache",
@@ -306,7 +306,7 @@ export const CalculateBMI = async ({
 export const createSplitAction = async(name) => {
   try {
     
-    const res = await fetch("http://localhost:4000/split/create", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/split/create", {
       method: "POST",
       body: JSON.stringify({ name }),
       mode: "cors",
@@ -337,7 +337,7 @@ export const createSplitAction = async(name) => {
 export const updateUserAttributes = async(weight , height , age) => {
   try {
     
-    const res = await fetch("http://localhost:4000/user/updateattr", {
+    const res = await fetch("https://yourfitnesspro.onrender.com/user/updateattr", {
       method: "POST",
       body: JSON.stringify({ weight , height , age }),
       mode: "cors",
